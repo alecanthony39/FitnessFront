@@ -6,11 +6,13 @@ import Home from "./Components/Home";
 import MyRoutines from "./Components/MyRoutines";
 import { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
-import { getPublicRoutines, getActivities } from "./Api";
+import { getPublicRoutines, getActivities, myData } from "./Api";
+import MyActivities from "./Components/MyActivities";
 function App() {
   const [token, setToken] = useState("");
   const [routines, setRoutines] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [user, setUser] = useState(null);
   useEffect(() => {
     const GetAllPosts = async () => {
       const publicRoutines = await getPublicRoutines();
@@ -24,6 +26,17 @@ function App() {
     getAllActivities();
   }, []);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await myData(token);
+      console.log(userData);
+      setUser(userData);
+    };
+    if (token) {
+      fetchUser();
+    }
+  }, [token]);
+
   return (
     <div>
       <h1>Welcome To SuperFitness</h1>
@@ -34,8 +47,13 @@ function App() {
           <Link to="/login">Log-In</Link>
         </>
       )}
-      {token && <Link to="/MyRoutines">My Routines</Link>}
-
+      {token && (
+        <>
+          <Link to="/MyRoutines">My Routines</Link>{" "}
+          <Link to="/MyActivities"> My Activities </Link>
+        </>
+      )}
+      <Link to="/Home">Home</Link>
       <Routes>
         <Route path="/signUp" element={<SignUp setToken={setToken} />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
@@ -49,10 +67,26 @@ function App() {
               setRoutines={setRoutines}
               activities={activities}
               setActivities={setActivities}
+              user={user}
             />
           }
         />
-        <Route path="MyRoutines" element={<MyRoutines token={token} />} />
+        <Route
+          path="/MyRoutines"
+          element={
+            <MyRoutines token={token} user={user} setRoutines={setRoutines} />
+          }
+        />
+        <Route
+          path="/MyActivities"
+          element={
+            <MyActivities
+              token={token}
+              user={user}
+              setActivities={setActivities}
+            />
+          }
+        />
       </Routes>
     </div>
   );

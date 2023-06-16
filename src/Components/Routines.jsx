@@ -1,7 +1,7 @@
 import React from "react";
 import SingleRoutine from "./SingleRoutine";
 
-const Routines = ({ routines, setRoutines }) => {
+const Routines = ({ routines, setRoutines, user }) => {
   return (
     <div>
       {routines.map((routine) => {
@@ -10,6 +10,7 @@ const Routines = ({ routines, setRoutines }) => {
             key={routine.id}
             routine={routine}
             setRoutines={setRoutines}
+            user={user}
           />
         );
       })}

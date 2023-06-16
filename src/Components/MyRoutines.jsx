@@ -1,12 +1,23 @@
 import React from "react";
-
-import { useState } from "react";
-import { createRoutine } from "../Api";
-const MyRoutines = ({ token }) => {
+import SingleRoutine from "./SingleRoutine";
+import { useState, useEffect } from "react";
+import { createRoutine, getUserRoutines, getPublicRoutines } from "../Api";
+import {} from "../Api";
+const MyRoutines = ({ token, user, setRoutines }) => {
   const [createR, setCreateR] = useState(false);
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
   const [isPublic, setIsPublic] = useState(false);
+  const [userRoutines, setUserRoutines] = useState([]);
+  console.log(user);
+  useEffect(() => {
+    const GetmyRoutines = async () => {
+      const _userRoutines = await getUserRoutines(token, user.username);
+      setUserRoutines(_userRoutines);
+    };
+    GetmyRoutines();
+  }, []);
+
   const handleCheckboxChange = () => {
     setIsPublic(!isPublic);
   };
@@ -23,6 +34,10 @@ const MyRoutines = ({ token }) => {
     setName("");
     setGoal("");
     setIsPublic(!isPublic);
+    const publicRoutines = await getPublicRoutines();
+    setRoutines(publicRoutines);
+    const _userRoutines = await getUserRoutines(token, user.username);
+    setUserRoutines(_userRoutines);
     setCreateR(false);
   };
 
@@ -34,6 +49,7 @@ const MyRoutines = ({ token }) => {
           <button onClick={() => setCreateR(true)}>Create</button>
         </span>
       </h1>
+
       {createR && (
         <>
           <form>
@@ -65,6 +81,22 @@ const MyRoutines = ({ token }) => {
           </form>
         </>
       )}
+      <h1>My Routines</h1>
+
+      <div>
+        {userRoutines.map((routine) => {
+          return (
+            <SingleRoutine
+              key={routine.id}
+              routine={routine}
+              token={token}
+              user={user}
+              setUserRoutines={setUserRoutines}
+              setRoutines={setRoutines}
+            />
+          );
+        })}
+      </div>
     </>
   );
 };
