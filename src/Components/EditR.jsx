@@ -5,6 +5,7 @@ import {
   deleteRoutine,
   getPublicRoutines,
   getUserRoutines,
+  attachActivity,
 } from "../Api";
 
 const EditR = ({
@@ -14,15 +15,35 @@ const EditR = ({
   setUserRoutines,
   setRoutines,
   user,
+  activities,
 }) => {
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
   const [isPublic, setIsPublic] = useState(routine.isPublic);
-
+  const [activityId, setActivityId] = useState(null);
+  const [count, setCount] = useState("");
+  const [duration, setDuration] = useState("");
+  console.log(activities);
   const handleCheckboxChange = () => {
     setIsPublic(!isPublic);
   };
+  const HandleAdd = async (event) => {
+    event.preventDefault();
 
+    const rAObj = {
+      activityId: activityId,
+      count: count,
+      duration: duration,
+    };
+    await attachActivity(routine.id, rAObj);
+    setActivityId(null);
+    setCount("");
+    setDuration("");
+    const publicRoutines = await getPublicRoutines();
+    setRoutines(publicRoutines);
+    const _userRoutines = await getUserRoutines(token, user.username);
+    setUserRoutines(_userRoutines);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const routineObj = {
@@ -82,6 +103,47 @@ const EditR = ({
         <button onClick={handleSubmit}>Submit</button>
         <button onClick={handleDelete}>Delete</button>
       </form>
+      <select
+        onChange={(event) => {
+          console.log(event.target.value);
+          setActivityId(event.target.value);
+        }}
+      >
+        {activities.map((act) => {
+          return (
+            <>
+              <option value={act.id}>{act.description}</option>
+            </>
+          );
+        })}
+      </select>
+
+      {activityId && (
+        <>
+          <h1>Add Activity</h1>
+          <form>
+            <label htmlFor="count">Count</label>
+            <input
+              type="text"
+              name="count"
+              value={count}
+              onChange={(event) => {
+                setCount(event.target.value);
+              }}
+            ></input>
+            <label htmlFor="duration">Duration</label>
+            <input
+              type="text"
+              name="duration"
+              value={duration}
+              onChange={(event) => {
+                setDuration(event.target.value);
+              }}
+            ></input>
+            <button onClick={HandleAdd}>Submit</button>
+          </form>
+        </>
+      )}
     </>
   );
 };

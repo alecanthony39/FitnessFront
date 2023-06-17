@@ -2,8 +2,8 @@ import React from "react";
 import SingleRoutine from "./SingleRoutine";
 import { useState, useEffect } from "react";
 import { createRoutine, getUserRoutines, getPublicRoutines } from "../Api";
-import {} from "../Api";
-const MyRoutines = ({ token, user, setRoutines }) => {
+
+const MyRoutines = ({ token, user, setRoutines, activities }) => {
   const [createR, setCreateR] = useState(false);
   const [name, setName] = useState("");
   const [goal, setGoal] = useState("");
@@ -17,7 +17,7 @@ const MyRoutines = ({ token, user, setRoutines }) => {
     };
     GetmyRoutines();
   }, []);
-
+  console.log(activities);
   const handleCheckboxChange = () => {
     setIsPublic(!isPublic);
   };
@@ -93,6 +93,7 @@ const MyRoutines = ({ token, user, setRoutines }) => {
               user={user}
               setUserRoutines={setUserRoutines}
               setRoutines={setRoutines}
+              activities={activities}
             />
           );
         })}

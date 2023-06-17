@@ -127,7 +127,7 @@ const getActivities = async () => {
     });
 
     const result = await response.json();
-
+    console.log(result);
     return result;
   } catch (err) {
     console.error(err);
@@ -221,6 +221,30 @@ const getRoutinebyActivity = async (activityId) => {
       }
     );
     const result = await response.json();
+
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const attachActivity = async (routineId, rAObj) => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/routines/${routineId}/activities`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          activityId: rAObj.activityId,
+          count: rAObj.count,
+          duration: rAObj.duration,
+        }),
+      }
+    );
+    const result = await response.json();
     console.log(result);
     return result;
   } catch (err) {
@@ -241,4 +265,5 @@ export {
   editRoutine,
   editActivity,
   getRoutinebyActivity,
+  attachActivity,
 };

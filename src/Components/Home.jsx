@@ -50,7 +50,12 @@ const Home = ({
         </>
       )}
       <h1>Routines</h1>
-      <Routines routines={routines} setRoutines={setRoutines} user={user} />
+      <Routines
+        routines={routines}
+        setRoutines={setRoutines}
+        user={user}
+        activities={activities}
+      />
     </div>
   );
 };

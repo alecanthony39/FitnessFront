@@ -8,9 +8,10 @@ const SingleRoutine = ({
   token,
   setRoutines,
   setUserRoutines,
+  activities,
 }) => {
   const [routineId, setRoutineId] = useState(null);
-
+  console.log(activities);
   return (
     <div
       style={{
@@ -39,6 +40,7 @@ const SingleRoutine = ({
               setUserRoutines={setUserRoutines}
               setRoutines={setRoutines}
               user={user}
+              activities={activities}
             />
           )}
         </>

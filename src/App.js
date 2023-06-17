@@ -21,6 +21,7 @@ function App() {
     GetAllPosts();
     const getAllActivities = async () => {
       const allActivities = await getActivities();
+
       setActivities(allActivities);
     };
     getAllActivities();
@@ -49,7 +50,7 @@ function App() {
       )}
       {token && (
         <>
-          <Link to="/MyRoutines">My Routines</Link>{" "}
+          <Link to="/MyRoutines">My Routines</Link>
           <Link to="/MyActivities"> My Activities </Link>
         </>
       )}
@@ -74,7 +75,12 @@ function App() {
         <Route
           path="/MyRoutines"
           element={
-            <MyRoutines token={token} user={user} setRoutines={setRoutines} />
+            <MyRoutines
+              token={token}
+              user={user}
+              setRoutines={setRoutines}
+              activities={activities}
+            />
           }
         />
         <Route
