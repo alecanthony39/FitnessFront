@@ -32,12 +32,22 @@ const SingleActivity = ({ Activity, token, setActivities }) => {
           >
             Routines With this Activity
           </button>
+          <button
+            onClick={() => {
+              setViewRa(false);
+            }}
+          >
+            Clear
+          </button>
         </span>
       </h1>
+
       {viewRa && (
         <RoutineWActivity
           raActivity={raActivity}
           setActivityId={setActivityId}
+          token={token}
+          setRaActivity={setRaActivity}
         />
       )}
       <h1>{Activity.name} </h1>
@@ -51,6 +61,7 @@ const SingleActivity = ({ Activity, token, setActivities }) => {
       >
         Edit
       </button>
+
       {activityId && (
         <EditA
           Activity={Activity}

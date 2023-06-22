@@ -109,6 +109,7 @@ const EditR = ({
           setActivityId(event.target.value);
         }}
       >
+        <option value={"none"}>Select An option</option>
         {activities.map((act) => {
           return (
             <>

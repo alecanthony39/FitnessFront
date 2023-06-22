@@ -26,9 +26,7 @@ const EditA = ({
     setActivities(allActivities.reverse());
     setActivityId(null);
   };
-  const handleDelete = async (event) => {
-    event.preventDefault();
-  };
+
   return (
     <>
       <form>
@@ -54,7 +52,6 @@ const EditA = ({
         />
 
         <button onClick={handleSubmit}>Submit</button>
-        <button onClick={handleDelete}>Delete</button>
       </form>
     </>
   );

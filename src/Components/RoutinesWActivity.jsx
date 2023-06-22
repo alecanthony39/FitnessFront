@@ -1,10 +1,16 @@
 import React from "react";
-
-const RoutineWActivity = ({ raActivity, setActivityId }) => {
+import { useState } from "react";
+import EditRA from "./EditRA";
+import SingleRWA from "./SingleRWA";
+const RoutineWActivity = ({
+  raActivity,
+  setActivityId,
+  token,
+  setRaActivity,
+}) => {
   return (
     <div>
       {raActivity.map((routine) => {
-        console.log(routine);
         return (
           <>
             <div
@@ -14,29 +20,22 @@ const RoutineWActivity = ({ raActivity, setActivityId }) => {
                 padding: "10px",
               }}
             >
-              <h1>1{routine.name}</h1>
+              <h1>Routine:{routine.name}</h1>
               <div>
-                2
                 {routine.activities.map((act) => {
                   return (
-                    <>
-                      <p>Count:{act.count}</p>
-                      <p>Description:{act.description}</p>
-                      <p>Duration:{act.duration}</p>
-                    </>
+                    <SingleRWA
+                      act={act}
+                      routine={routine}
+                      token={token}
+                      setRaActivity={setRaActivity}
+                    />
                   );
                 })}
               </div>
 
-              <h2>5{routine.creatorName}</h2>
+              <h2>Creator:{routine.creatorName}</h2>
             </div>
-            {/* <button
-              onClick={() => {
-                setActivityId(null);
-              }}
-            >
-              Close
-            </button> */}
           </>
         );
       })}

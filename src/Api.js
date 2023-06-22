@@ -1,4 +1,4 @@
-const BASE_URL = `http://fitnesstrac-kr.herokuapp.com/api`;
+const BASE_URL = `https://fitnesstrac-kr.herokuapp.com/api`;
 
 const registerUser = async (userObj) => {
   try {
@@ -13,10 +13,14 @@ const registerUser = async (userObj) => {
       }),
     });
     const result = await response.json();
+
+    if (result.error) {
+      throw Error(result.message);
+    }
+
     return result;
-    // return result;
   } catch (err) {
-    console.log(err);
+    throw err;
   }
 };
 
@@ -33,7 +37,9 @@ const login = async (userObj) => {
       }),
     });
     const result = await response.json();
-
+    if (result.error) {
+      throw Error(result.message);
+    }
     return result.token;
   } catch (err) {
     throw err;
@@ -252,6 +258,45 @@ const attachActivity = async (routineId, rAObj) => {
   }
 };
 
+const editRa = async (rAId, token, rAObj) => {
+  try {
+    const response = await fetch(`${BASE_URL}/routine_activities/${rAId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        count: 2,
+        duration: 30,
+      }),
+    });
+    const result = await response.json();
+    console.log(token);
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const deleteRA = async (rAId, token) => {
+  try {
+    const response = await fetch(`${BASE_URL}/routine_activities/${rAId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 export {
   registerUser,
   login,
@@ -266,4 +311,6 @@ export {
   editActivity,
   getRoutinebyActivity,
   attachActivity,
+  editRa,
+  deleteRA,
 };

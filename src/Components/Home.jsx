@@ -1,7 +1,6 @@
 import React from "react";
-
 import { useState } from "react";
-
+import Button from "react-bootstrap/Button";
 import Routines from "./Routines";
 import Activities from "./Activities";
 
@@ -16,6 +15,10 @@ const Home = ({
 }) => {
   const [viewActivity, setViewActivity] = useState(false);
 
+  const handleLogout = () => {
+    setToken(null);
+  };
+
   return (
     <div>
       {user && (
@@ -23,23 +26,18 @@ const Home = ({
           <h1>
             Welcome {user.username}
             <span>
-              <button
-                onClick={(event) => {
-                  setToken(null);
-                }}
-              >
+              <Button variant="danger" onClick={handleLogout}>
                 Log Out
-              </button>
+              </Button>
             </span>
           </h1>
         </>
       )}
-      <button onClick={() => setViewActivity(!viewActivity)}>
+      <Button onClick={() => setViewActivity(!viewActivity)}>
         View Activities
-      </button>
+      </Button>
       {viewActivity && (
         <>
-          {" "}
           <h1>Activities</h1>
           <Activities
             activities={activities}
@@ -55,6 +53,7 @@ const Home = ({
         setRoutines={setRoutines}
         user={user}
         activities={activities}
+        token={token}
       />
     </div>
   );

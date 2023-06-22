@@ -2,6 +2,8 @@ import React from "react";
 import SingleRoutine from "./SingleRoutine";
 import { useState, useEffect } from "react";
 import { createRoutine, getUserRoutines, getPublicRoutines } from "../Api";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 const MyRoutines = ({ token, user, setRoutines, activities }) => {
   const [createR, setCreateR] = useState(false);
@@ -9,7 +11,7 @@ const MyRoutines = ({ token, user, setRoutines, activities }) => {
   const [goal, setGoal] = useState("");
   const [isPublic, setIsPublic] = useState(false);
   const [userRoutines, setUserRoutines] = useState([]);
-  console.log(user);
+
   useEffect(() => {
     const GetmyRoutines = async () => {
       const _userRoutines = await getUserRoutines(token, user.username);
@@ -17,7 +19,7 @@ const MyRoutines = ({ token, user, setRoutines, activities }) => {
     };
     GetmyRoutines();
   }, []);
-  console.log(activities);
+
   const handleCheckboxChange = () => {
     setIsPublic(!isPublic);
   };
@@ -43,44 +45,53 @@ const MyRoutines = ({ token, user, setRoutines, activities }) => {
 
   return (
     <>
-      <h1>
-        Create Routine:
-        <span>
-          <button onClick={() => setCreateR(true)}>Create</button>
-        </span>
-      </h1>
+      {!user && <h1>Please Sign In to View this Page</h1>}
 
-      {createR && (
+      {user && createR && (
         <>
-          <form>
-            <label htmlFor="name">Name:</label>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
-            />
-            <label htmlFor="goal">Goal:</label>
-            <input
-              type="text"
-              name="goal"
-              value={goal}
-              onChange={(event) => {
-                setGoal(event.target.value);
-              }}
-            />
-            <label>Is Public?</label>
-            <input
-              type="checkbox"
-              checked={isPublic}
-              onChange={handleCheckboxChange}
-            />
-            <button onClick={handleSubmit}>Submit</button>
-          </form>
+          <h1>
+            Create Routine:
+            <span>
+              <Button variant="dark" onClick={() => setCreateR(true)}>
+                Create
+              </Button>
+            </span>
+          </h1>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="name">
+              <Form.Label>Name:</Form.Label>
+              <Form.Control
+                type="text"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="goal">
+              <Form.Label>Goal:</Form.Label>
+              <Form.Control
+                type="text"
+                value={goal}
+                onChange={(event) => setGoal(event.target.value)}
+              />
+            </Form.Group>
+
+            <Form.Group controlId="isPublic">
+              <Form.Check
+                type="checkbox"
+                label="Is Public?"
+                checked={isPublic}
+                onChange={handleCheckboxChange}
+              />
+            </Form.Group>
+
+            <Button variant="danger" type="submit">
+              Submit
+            </Button>
+          </Form>
         </>
       )}
+
       <h1>My Routines</h1>
 
       <div>
@@ -101,4 +112,5 @@ const MyRoutines = ({ token, user, setRoutines, activities }) => {
     </>
   );
 };
+
 export default MyRoutines;

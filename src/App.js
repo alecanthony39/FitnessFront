@@ -1,27 +1,31 @@
-import logo from "./logo.svg";
-import "./App.css";
+import React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, Routes, Route, Link } from "react-router-dom";
+import { getPublicRoutines, getActivities, myData } from "./Api";
 import SignUp from "./Components/SignUp";
 import Login from "./Components/Login";
 import Home from "./Components/Home";
 import MyRoutines from "./Components/MyRoutines";
-import { useState, useEffect } from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import { getPublicRoutines, getActivities, myData } from "./Api";
 import MyActivities from "./Components/MyActivities";
+import logo from "./logo.svg";
+import "./App.css";
+
 function App() {
   const [token, setToken] = useState("");
   const [routines, setRoutines] = useState([]);
   const [activities, setActivities] = useState([]);
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const GetAllPosts = async () => {
+    const getAllPublicRoutines = async () => {
       const publicRoutines = await getPublicRoutines();
       setRoutines(publicRoutines);
     };
-    GetAllPosts();
+    getAllPublicRoutines();
+
     const getAllActivities = async () => {
       const allActivities = await getActivities();
-
       setActivities(allActivities);
     };
     getAllActivities();
@@ -30,7 +34,6 @@ function App() {
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await myData(token);
-      console.log(userData);
       setUser(userData);
     };
     if (token) {
@@ -38,23 +41,47 @@ function App() {
     }
   }, [token]);
 
+  const handleLogout = () => {
+    setToken("");
+    setUser(null);
+    navigate("/login");
+  };
+
   return (
-    <div>
-      <h1>Welcome To SuperFitness</h1>
-      <p>{token}</p>
-      {!token && (
-        <>
-          <Link to="/signUp">Sign Up</Link>
-          <Link to="/login">Log-In</Link>
-        </>
-      )}
-      {token && (
-        <>
-          <Link to="/MyRoutines">My Routines</Link>
-          <Link to="/MyActivities"> My Activities </Link>
-        </>
-      )}
-      <Link to="/Home">Home</Link>
+    <div className="app-container">
+      <header className="navbar">
+        <nav>
+          <ul className="nav-links">
+            {!token && (
+              <>
+                <li>
+                  <Link to="/signUp">Sign Up</Link>
+                </li>
+                <li>
+                  <Link to="/login">Log-In</Link>
+                </li>
+              </>
+            )}
+            {token && (
+              <>
+                <li>
+                  <Link to="/MyRoutines">My Routines</Link>
+                </li>
+                <li>
+                  <Link to="/Create-Activities">Create Activity</Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              </>
+            )}
+            <li>
+              <Link to="/Home">Home</Link>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
       <Routes>
         <Route path="/signUp" element={<SignUp setToken={setToken} />} />
         <Route path="/login" element={<Login setToken={setToken} />} />
@@ -84,7 +111,7 @@ function App() {
           }
         />
         <Route
-          path="/MyActivities"
+          path="/Create-Activities"
           element={
             <MyActivities
               token={token}
